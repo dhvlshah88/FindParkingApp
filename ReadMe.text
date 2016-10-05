@@ -1,0 +1,15 @@
+README 
+
+Open RideCellFindingParking workspace file to open the project in Xcode.
+Note: If you don't have cocoapods install, please do install them first (visit cocoapods.org) before running the app.
+
+Edit the app scheme default location to San Francisco.
+Follow the steps to do that:
+1) Press the target project button on Xcode.
+2) Select Edit Scheme.
+3) Go to Options tab.
+4) Select Alloc location Simulation and Default location selector to San Francisco.
+
+Run the app. And every thing else is pretty straight forward.
+
+Note: Some features of app are not complete in given time. 
