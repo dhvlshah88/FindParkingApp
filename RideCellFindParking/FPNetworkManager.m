@@ -37,25 +37,30 @@ const NSInteger kUserId = 1;
 }
 
 
-- (void)getFreeParkingSpotsUsingLatitude:(double)latitude andLongitude:(double)longitude withCompletionHandler:(void (^)(NSArray *spots, NSError *error))completionHandler {
+- (void)freeParkingSpotsUsingLatitude:(double)latitude andLongitude:(double)longitude withCompletionHandler:(void (^)(NSArray *spots, NSError *error))completionHandler {
     NSString *freeParkingSpotUrlString = [NSString stringWithFormat:@"%@%@", kParkingLocationBaseUrl, [NSString stringWithFormat:kGetParkingLocations, latitude, longitude]];
     NSDictionary *parameters = @{@"format": @"json"};
-    [self.httpSessionManager GET:freeParkingSpotUrlString parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
+
+    [self.httpSessionManager GET:freeParkingSpotUrlString
+                      parameters:parameters
+                        progress:^(NSProgress * _Nonnull downloadProgress) {
         
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"/n/%@", responseObject);
-        NSArray *parkingSpots = [FPJsonUtility freeParkingSpots:responseObject];
-        completionHandler(parkingSpots, nil);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"%@/n/%@", error, error.description);
-        completionHandler(nil, error);
-    }];
+                        }
+                         success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                             NSArray *parkingSpots = [FPJsonUtility freeParkingSpots:responseObject];
+                             completionHandler(parkingSpots, nil);
+                         }
+                         failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                             NSLog(@"%@/n/%@", error, error.description);
+                             completionHandler(nil, error);
+                         }
+     ];
 }
 
 - (BOOL)reserveFreeParkingSpot:(ParkingSpot *)spot forMinutes:(NSInteger)reserveTime {
     NSString *reserveUrlString = [NSString stringWithFormat:@"%@%@", kParkingLocationBaseUrl, [NSString stringWithFormat:kReserveParkingSpot, spot.spotId]];
+    
     AFJSONRequestSerializer *reqSerializer = [AFJSONRequestSerializer serializer];
-    [reqSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [reqSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
     AFJSONResponseSerializer *repSerializer = [AFJSONResponseSerializer serializer];

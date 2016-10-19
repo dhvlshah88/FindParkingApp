@@ -21,7 +21,7 @@
 
 - (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)sessionConfiguration;
 
-- (void)getFreeParkingSpotsUsingLatitude:(double)latitude andLongitude:(double)longitude withCompletionHandler:(void (^)(NSArray *spots, NSError *error))completionHandler;
+- (void)freeParkingSpotsUsingLatitude:(double)latitude andLongitude:(double)longitude withCompletionHandler:(void (^)(NSArray *spots, NSError *error))completionHandler;
 
 - (BOOL)reserveFreeParkingSpot:(ParkingSpot *)spot forMinutes:(NSInteger)reserveTime;
 

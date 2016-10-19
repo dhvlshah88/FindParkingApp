@@ -156,7 +156,7 @@ static CGFloat const tipWidth = 20.0;
     self.openSpots.textColor = [UIColor whiteColor];
     self.openSpots.font = [UIFont systemFontOfSize:20.0 weight:UIFontWeightSemibold];
     self.openSpots.textAlignment = NSTextAlignmentCenter;
-    self.openSpots.text = [NSString stringWithFormat:@"%ld", self.spotAnnotation.spot.spotId];
+    self.openSpots.text = [NSString stringWithFormat:@"%d", self.spotAnnotation.spot.isReserved ? 0 : 1];
     [self.containerView addSubview:self.openSpots];
     
     _costPerMinuteLabel = [[UILabel alloc] init];
@@ -227,7 +227,7 @@ static CGFloat const tipWidth = 20.0;
     
     [self.openSpotsLabel makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.containerView).with.offset(20);
-        make.trailing.lessThanOrEqualTo(self.costPerMinuteLabel.leading);
+//        make.trailing.lessThanOrEqualTo(self.costPerMinuteLabel.leading);
 //        make.width.equalTo(@(self.frame.size.width/3));
         make.top.equalTo(self.lineView.bottom).with.offset(5);
     }];

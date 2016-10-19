@@ -18,8 +18,6 @@
 
 + (FPDeviceContext *)instance;
 
-//- (CLLocationCoordinate2D)defaultLocationCoordinate;
-
 - (void)locationCoordinatesFromAddressString:(NSString *)addressString completionHandler:(void (^)(CLLocationCoordinate2D currentCoordinate)) completionHandler;
 
 //- (NSString *)reverseGeocodeLocation:(CLLocation *)location;

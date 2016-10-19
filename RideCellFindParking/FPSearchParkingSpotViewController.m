@@ -32,6 +32,7 @@ NSString * const kParkingSpotAnnotationViewReuseIdentifier = @"kParkingSpotAnnot
 @property (nonatomic, strong) MASConstraint *searchViewBottomConstraint;
 @property (nonatomic) NSInteger reservedTime;
 @property (nonatomic, strong) ParkingSpot *selectedParkingSpot;
+@property (nonatomic, strong) UIAlertController *confirmationController;
 
 @end
 
@@ -180,10 +181,26 @@ NSString * const kParkingSpotAnnotationViewReuseIdentifier = @"kParkingSpotAnnot
 
 - (void)parkingSpotCalloutViewDidPressPayAndReserveSpot:(FPParkingSpotAnnotation *)spot {
     _selectedParkingSpot = spot.spot;
-    BOOL result = [self.networkManager reserveFreeParkingSpot:self.selectedParkingSpot forMinutes:self.reservedTime];
-    if (result) {
-        //show successful alert controller
+    if (!self.selectedParkingSpot.isReserved) {
+        BOOL result = [self.networkManager reserveFreeParkingSpot:self.selectedParkingSpot forMinutes:self.reservedTime];
+        if (result) {
+            _confirmationController = [UIAlertController alertControllerWithTitle:@"Great" message:@"Your reservation has been confirmed." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *checkAction = [UIAlertAction actionWithTitle:@"Check" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [self.confirmationController addAction:checkAction];
+            UIAlertAction *closeAction = [UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [self.confirmationController dismissViewControllerAnimated:true completion:^{
+                    _confirmationController = nil;
+                }];
+            }];
+            [self.confirmationController addAction:closeAction];
+            [self presentViewController:self.confirmationController animated:true completion:nil];
+        }
+    } else {
+        //Already reserved
     }
+    
 }
 
 - (void)parkingSpotCalloutViewDidPressMoreAboutSpot:(FPParkingSpotAnnotation *)spot {
@@ -258,7 +275,7 @@ NSString * const kParkingSpotAnnotationViewReuseIdentifier = @"kParkingSpotAnnot
     __weak FPSearchParkingSpotViewController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         CLLocationCoordinate2D currentCoordinate = coordinate;
-        [weakSelf.networkManager getFreeParkingSpotsUsingLatitude:currentCoordinate.latitude andLongitude:currentCoordinate.longitude
+        [weakSelf.networkManager freeParkingSpotsUsingLatitude:currentCoordinate.latitude andLongitude:currentCoordinate.longitude
                                             withCompletionHandler:^(NSArray *spots, NSError *error) {
                                                 if (!error) {
                                                     _parkingSpots = spots;

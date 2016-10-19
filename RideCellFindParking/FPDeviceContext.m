@@ -68,10 +68,6 @@ static NSString * const kDeviceContextHasSeenLocationPermission = @"kDeviceConte
 
 #pragma mark Public Methods
 
-//- (CLLocationCoordinate2D)defaultLocationCoordinate {
-//    return [self locationCoordinatesFromAddressString:@"San Francisco"];
-//}
-
 - (void)locationCoordinatesFromAddressString:(NSString *)addressString completionHandler:(void (^)(CLLocationCoordinate2D currentCoordinate)) completionHandler {
     __block CLLocationCoordinate2D locationCoordinate;
     [self.geocoder geocodeAddressString:addressString completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
@@ -120,7 +116,7 @@ static NSString * const kDeviceContextHasSeenLocationPermission = @"kDeviceConte
 - (void)addressReserveGecodeLocation:(CLLocation *)location completionHandler:(void (^)(NSString *address))completionHandler {
     __block CLPlacemark *placemark;
     __block NSString *address;
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
         [self.geocoder reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
             if (!error && [placemarks count] > 0) {
                 placemark = [placemarks lastObject];
@@ -134,7 +130,6 @@ static NSString * const kDeviceContextHasSeenLocationPermission = @"kDeviceConte
                 completionHandler(nil);
             }
         }];
-//    });
 }
 
 #pragma mark Location Permission
